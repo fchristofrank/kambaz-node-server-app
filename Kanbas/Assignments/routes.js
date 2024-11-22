@@ -8,7 +8,7 @@ export default function AssignmentRoutes(app) {
     app.put("/api/assignments/:assignmentId", (req, res) => {
         const { assignmentId } = req.params;
         const assignmentUpdates = req.body;
-        assignmentDao.updateModule(assignmentId, assignmentUpdates);
+        assignmentDao.updateAssignment(assignmentId, assignmentUpdates);
         res.sendStatus(204);
     });
 
