@@ -1,13 +1,13 @@
 import express from 'express';
 import Hello from './Hello.js';
 import Lab5 from './Lab5/index.js';
-import UserRoutes from './Kanbas/Users/routes.js';
-import CourseRoutes from './Kanbas/Courses/routes.js';
+import UserRoutes from './Kambaz/Users/routes.js';
+import CourseRoutes from './Kambaz/Courses/routes.js';
 import cors from "cors";
 import session from "express-session";
-import ModuleRoutes from "./Kanbas/Modules/routes.js";
+import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import "dotenv/config";
-import AssignmentRoutes from './Kanbas/Assignments/routes.js';
+import AssignmentRoutes from './Kambaz/Assignments/routes.js';
 const app = express();
 app.use(
     cors({
@@ -16,7 +16,7 @@ app.use(
     })
 );
 const sessionOptions = {
-    secret: process.env.SESSION_SECRET || "kanbas",
+    secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
     saveUninitialized: false,
 };
