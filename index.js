@@ -1,15 +1,16 @@
 import express from 'express';
 import Hello from './Hello.js';
 import Lab5 from './Lab5/index.js';
-import UserRoutes from './Kanbas/Users/routes.js';
-import CourseRoutes from './Kanbas/Courses/routes.js';
+import UserRoutes from './Kambaz/Users/routes.js';
+import CourseRoutes from './Kambaz/Courses/routes.js';
 import cors from "cors";
 import session from "express-session";
-import ModuleRoutes from "./Kanbas/Modules/routes.js";
+import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import "dotenv/config";
-import AssignmentRoutes from './Kanbas/Assignments/routes.js';
+import AssignmentRoutes from './Kambaz/Assignments/routes.js';
 import mongoose from "mongoose";
-const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas";
+const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
+console.log("Connecting to MongoDB at " + CONNECTION_STRING);
 mongoose.connect(CONNECTION_STRING);
 const app = express();
 app.use(
@@ -19,7 +20,7 @@ app.use(
     })
 );
 const sessionOptions = {
-    secret: process.env.SESSION_SECRET || "kanbas",
+    secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
     saveUninitialized: false,
 };
