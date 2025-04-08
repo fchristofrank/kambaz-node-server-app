@@ -1,5 +1,6 @@
 import model from "./model.js";
 export function findAllCourses() {
+    console.log(model);
     return model.find();
 }
 
