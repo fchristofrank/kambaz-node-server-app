@@ -1,6 +1,5 @@
 import model from "./model.js";
 export function findAllCourses() {
-    console.log(model);
     return model.find();
 }
 
@@ -25,5 +24,7 @@ export function updateCourse(courseId, courseUpdates) {
     return model.updateOne({ _id: courseId }, { $set: courseUpdates });
 }
 
-
-
+export function updateLikes(courseId, likesObj) {
+    const { likes } = likesObj; // extract the number
+    return model.updateOne({ _id: courseId }, { $set: { likes } });
+}

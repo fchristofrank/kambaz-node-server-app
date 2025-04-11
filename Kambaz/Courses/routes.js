@@ -5,7 +5,6 @@ import * as enrollmentsDao from "../Enrollments/dao.js";
 export default function CourseRoutes(app) {
     app.get("/api/courses", async (req, res) => {
         const courses = await dao.findAllCourses();
-        console.log(courses);
         res.send(courses);
     });
 
@@ -67,6 +66,15 @@ export default function CourseRoutes(app) {
         res.json(users);
     };
     app.get("/api/courses/:cid/users", findUsersForCourse);
+
+    const updateLikesForPosts = async (req, res) => {
+        const { cid } = req.params;
+        const likes = req.body;
+        console.log(req.body);
+        const users = await dao.updateLikes(cid, likes);
+        res.json(users);
+    };
+    app.post("/api/users/courses/:cid", updateLikesForPosts);
 
 }
 
