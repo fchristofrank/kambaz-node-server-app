@@ -1,6 +1,10 @@
 import * as dao from "./dao.js";
 import * as courseDao from "../Courses/dao.js";
 import * as enrollmentsDao from "../Enrollments/dao.js";
+import mongoose from "mongoose";
+import schema from "./schema.js";
+const model = mongoose.model("UserModel", schema);
+
 export default function UserRoutes(app) {
     const createUser = async (req, res) => {
         const user = await dao.createUser(req.body);
@@ -145,4 +149,50 @@ export default function UserRoutes(app) {
       };
       app.post("/api/users/:uid/courses/:cid", enrollUserInCourse);
       app.delete("/api/users/:uid/courses/:cid", unenrollUserFromCourse);
+
+      const addConnection = async (req, res) => {
+        const { userID, connectionID } = req.body;
+
+        // 1. Validate inputs
+        if (!userID || !connectionID) {
+          return res
+            .status(400)
+            .json({ error: "Both userID and connectionID are required" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(userID)) {
+          return res.status(400).json({ error: "userID is not a valid ObjectId" });
+        }
+
+        try {
+          // 2. Atomically add connectionID if not already present
+          const updatedUser = await model.findByIdAndUpdate(
+            userID,
+            { $addToSet: { connections: connectionID } },
+            { new: true, runValidators: true }
+          );
+
+          // 3. Handle not-found
+          if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+          }
+
+          // 4. Update session if the updated user is the current session user
+          const currentUser = req.session["currentUser"];
+          if (currentUser && currentUser._id === userID) {
+            req.session["currentUser"] = updatedUser;
+          }
+
+          // 5. Return the updated user
+          return res.json(updatedUser);
+        } catch (error) {
+          console.error("Error in addConnection:", error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
+      };
+
+
+      // Register your route (make sure you have `app.use(express.json())` enabled)
+      app.post("/api/users/addConnection", addConnection);
+
+
 }
